@@ -1,49 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem E-Bengkel</title>
+@extends('layouts.app')
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+@section('content')
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>📋 Daftar Antrean Servis</h2>
+    <a href="{{ url('/kendaraan/create') }}" class="btn btn-primary">➕ Tambah Kendaraan</a>
+</div>
 
-    <nav class="navbar navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                Sistem E-Bengkel
-            </a>
-        </div>
-    </nav>
-
-    <div class="container mt-4">
-
-        <h2>Daftar Servis Kendaraan</h2>
-
-        <table class="table table-bordered">
-            <thead class="table-dark">
-                <tr>
-                    <th>No</th>
-                    <th>Plat Nomor</th>
-                    <th>Nama Pemilik</th>
-                    <th>Merk Kendaraan</th>
-                    <th>Keluhan</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>B 1234 ABC</td>
-                    <td>Andi</td>
-                    <td>Honda</td>
-                    <td>Ganti Oli</td>
-                </tr>
-            </tbody>
-        </table>
-
-    </div>
-
-</body>
-</html>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>No</th>
+                <th>Plat Nomor</th>
+                <th>Nama Pemilik</th>
+                <th>Merk Kendaraan</th>
+                <th>Keluhan</th>
+                <th width="150">Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($kendaraans as $index => $kendaraan)
+            <tr>
+                <td>{{ $index + 1 }}</td>
+                <td><strong>{{ $kendaraan->plat_nomor }}</strong></td>
+                <td>{{ $kendaraan->nama_pemilik }}</td>
+                <td>{{ $kendaraan->merk_kendaraan }}</td>
+                <td>{{ $kendaraan->keluhan }}</td>
+                <td>
+                    <a href="{{ url('/kendaraan/'.$kendaraan->id.'/edit') }}" class="btn btn-warning btn-sm">✏️ Edit</a>
+                    <form action="{{ url('/kendaraan/'.$kendaraan->id) }}" method="POST" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus kendaraan ini?')">
+                            🗑️ Hapus
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            @empty
+            <tr>
+                <td colspan="6" class="text-center py-4">
+                    <div class="alert alert-info mb-0">
+                        Belum ada data kendaraan. Silakan tambah data!
+                    </div>
+                </td>
+            </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
+@endsection

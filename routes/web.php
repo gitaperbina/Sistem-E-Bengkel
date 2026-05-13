@@ -1,7 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\KendaraanController;
 
 Route::get('/', function () {
-    return view('kendaraan.index');
+    return redirect('/kendaraan');
 });
+
+Route::resource('kendaraan', KendaraanController::class);
